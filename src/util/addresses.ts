@@ -1,7 +1,11 @@
-import { CHAIN_TO_ADDRESSES_MAP, ChainId, Token } from '@uniswap/sdk-core';
+import { CHAIN_TO_ADDRESSES_MAP, ChainId, PUSSY_LIBRARY_CONFIG, Token } from '@pussyfinancial/sdk-core';
+import { ZERO_ADDRESS } from '@uniswap/universal-router-sdk/dist/utils/constants';
 import { FACTORY_ADDRESS } from '@uniswap/v3-sdk';
 
 import { NETWORKS_WITH_SAME_UNISWAP_ADDRESSES } from './chains';
+
+const PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET = PUSSY_LIBRARY_CONFIG.chains[ChainId.MAINNET];
+const PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT = PUSSY_LIBRARY_CONFIG.chains[ChainId.HARDHAT];
 
 export const BNB_TICK_LENS_ADDRESS =
   CHAIN_TO_ADDRESSES_MAP[ChainId.BNB].tickLensAddress;
@@ -30,6 +34,10 @@ export const V3_CORE_FACTORY_ADDRESSES: AddressMap = {
     CHAIN_TO_ADDRESSES_MAP[ChainId.BASE_GOERLI].v3CoreFactoryAddress,
   [ChainId.BASE]: CHAIN_TO_ADDRESSES_MAP[ChainId.BASE].v3CoreFactoryAddress,
   // TODO: Gnosis + Moonbeam contracts to be deployed
+  
+  //PussySwap overrides
+  [ChainId.MAINNET]: CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].v3CoreFactoryAddress,
+  [ChainId.HARDHAT]: CHAIN_TO_ADDRESSES_MAP[ChainId.HARDHAT].v3CoreFactoryAddress, 
 };
 
 export const QUOTER_V2_ADDRESSES: AddressMap = {
@@ -48,13 +56,19 @@ export const QUOTER_V2_ADDRESSES: AddressMap = {
     CHAIN_TO_ADDRESSES_MAP[ChainId.BASE_GOERLI].quoterAddress,
   [ChainId.BASE]: CHAIN_TO_ADDRESSES_MAP[ChainId.BASE].quoterAddress,
   // TODO: Gnosis + Moonbeam contracts to be deployed
+
+  //PussySwap overrides
+  [ChainId.MAINNET]: CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].quoterAddress,
+  [ChainId.HARDHAT]: CHAIN_TO_ADDRESSES_MAP[ChainId.HARDHAT].quoterAddress, 
 };
 
 export const MIXED_ROUTE_QUOTER_V1_ADDRESSES: AddressMap = {
-  [ChainId.MAINNET]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].v1MixedRouteQuoterAddress,
   [ChainId.GOERLI]:
     CHAIN_TO_ADDRESSES_MAP[ChainId.GOERLI].v1MixedRouteQuoterAddress,
+
+  //PussySwap overrides
+  [ChainId.MAINNET]: CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].v1MixedRouteQuoterAddress,
+  [ChainId.HARDHAT]: CHAIN_TO_ADDRESSES_MAP[ChainId.HARDHAT].v1MixedRouteQuoterAddress, 
 };
 
 export const UNISWAP_MULTICALL_ADDRESSES: AddressMap = {
@@ -74,13 +88,23 @@ export const UNISWAP_MULTICALL_ADDRESSES: AddressMap = {
     CHAIN_TO_ADDRESSES_MAP[ChainId.BASE_GOERLI].multicallAddress,
   [ChainId.BASE]: CHAIN_TO_ADDRESSES_MAP[ChainId.BASE].multicallAddress,
   // TODO: Gnosis + Moonbeam contracts to be deployed
+
+  //PussySwap overrides
+  [ChainId.MAINNET]: CHAIN_TO_ADDRESSES_MAP[ChainId.MAINNET].multicallAddress,
+  [ChainId.HARDHAT]: CHAIN_TO_ADDRESSES_MAP[ChainId.HARDHAT].multicallAddress, 
 };
 
 export const SWAP_ROUTER_02_ADDRESSES = (chainId: number): string => {
+  const DEFAULT = '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45';
+
   if (chainId == ChainId.BNB) {
     return BNB_SWAP_ROUTER_02_ADDRESS;
   }
-  return '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45';
+  if (chainId == ChainId.MAINNET || chainId == ChainId.HARDHAT) {
+    return CHAIN_TO_ADDRESSES_MAP[chainId].swapRouter02Address ?? DEFAULT
+  }
+
+  return DEFAULT;
 };
 
 export const OVM_GASPRICE_ADDRESS =
@@ -121,6 +145,8 @@ export const WETH9: {
     | ChainId.MOONBEAM
     | ChainId.BNB
     | ChainId.AVALANCHE
+    | ChainId.OPTIMISM_SEPOLIA
+    | ChainId.ARBITRUM_SEPOLIA
   >]: Token;
 } = {
   [ChainId.MAINNET]: new Token(
@@ -186,6 +212,34 @@ export const WETH9: {
     'WETH',
     'Wrapped Ether'
   ),
+  //PussySwap overrides
+  ...(PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET !== undefined ? {
+    [ChainId.MAINNET]: new Token(
+      ChainId.MAINNET,
+      PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET.contracts.tokens.weth.address,
+      18,
+      'WETH',
+      'Wrapped Ether'
+    )
+  }: {}),
+  ...(PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT !== undefined ? {
+    [ChainId.HARDHAT]: new Token(
+      ChainId.HARDHAT,
+      PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT.contracts.tokens.weth.address,
+      18,
+      'WETH',
+      'Wrapped Ether'
+    )
+  }: {
+    //need a default value for this chain in this WETH9 object
+    [ChainId.HARDHAT]: new Token(
+      ChainId.HARDHAT,
+      ZERO_ADDRESS,
+      18,
+      'WETH',
+      'Wrapped Ether'
+    )
+  })
 };
 
 export const BEACON_CHAIN_DEPOSIT_ADDRESS =

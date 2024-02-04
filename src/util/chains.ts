@@ -3,12 +3,18 @@ import {
   Currency,
   Ether,
   NativeCurrency,
+  PUSSY_LIBRARY_CONFIG,
   Token,
-} from '@uniswap/sdk-core';
+} from '@pussyfinancial/sdk-core';
+import { ZERO_ADDRESS } from '@uniswap/universal-router-sdk/dist/utils/constants';
+
+const PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET = PUSSY_LIBRARY_CONFIG.chains[ChainId.MAINNET];
+const PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT = PUSSY_LIBRARY_CONFIG.chains[ChainId.HARDHAT];
 
 // WIP: Gnosis, Moonbeam
 export const SUPPORTED_CHAINS: ChainId[] = [
   ChainId.MAINNET,
+  ChainId.HARDHAT,
   ChainId.OPTIMISM,
   ChainId.OPTIMISM_GOERLI,
   ChainId.ARBITRUM_ONE,
@@ -27,6 +33,7 @@ export const SUPPORTED_CHAINS: ChainId[] = [
 
 export const V2_SUPPORTED = [
   ChainId.MAINNET,
+  ChainId.HARDHAT,
   ChainId.GOERLI,
   ChainId.SEPOLIA,
   ChainId.OPTIMISM,
@@ -47,6 +54,7 @@ export const HAS_L1_FEE = [
 
 export const NETWORKS_WITH_SAME_UNISWAP_ADDRESSES = [
   ChainId.MAINNET,
+  ChainId.HARDHAT,
   ChainId.GOERLI,
   ChainId.OPTIMISM,
   ChainId.ARBITRUM_ONE,
@@ -58,6 +66,8 @@ export const ID_TO_CHAIN_ID = (id: number): ChainId => {
   switch (id) {
     case 1:
       return ChainId.MAINNET;
+    case 31337:
+      return ChainId.HARDHAT;
     case 5:
       return ChainId.GOERLI;
     case 11155111:
@@ -97,6 +107,7 @@ export const ID_TO_CHAIN_ID = (id: number): ChainId => {
 
 export enum ChainName {
   MAINNET = 'mainnet',
+  HARDHAT = 'hardhat',
   GOERLI = 'goerli',
   SEPOLIA = 'sepolia',
   OPTIMISM = 'optimism-mainnet',
@@ -128,6 +139,11 @@ export enum NativeCurrencyName {
 
 export const NATIVE_NAMES_BY_ID: { [chainId: number]: string[] } = {
   [ChainId.MAINNET]: [
+    'ETH',
+    'ETHER',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+  ],
+  [ChainId.HARDHAT]: [
     'ETH',
     'ETHER',
     '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -186,6 +202,7 @@ export const NATIVE_NAMES_BY_ID: { [chainId: number]: string[] } = {
 
 export const NATIVE_CURRENCY: { [chainId: number]: NativeCurrencyName } = {
   [ChainId.MAINNET]: NativeCurrencyName.ETHER,
+  [ChainId.HARDHAT]: NativeCurrencyName.ETHER,
   [ChainId.GOERLI]: NativeCurrencyName.ETHER,
   [ChainId.SEPOLIA]: NativeCurrencyName.ETHER,
   [ChainId.OPTIMISM]: NativeCurrencyName.ETHER,
@@ -207,6 +224,8 @@ export const ID_TO_NETWORK_NAME = (id: number): ChainName => {
   switch (id) {
     case 1:
       return ChainName.MAINNET;
+    case 31337:
+      return ChainName.HARDHAT;
     case 5:
       return ChainName.GOERLI;
     case 11155111:
@@ -252,6 +271,8 @@ export const ID_TO_PROVIDER = (id: ChainId): string => {
   switch (id) {
     case ChainId.MAINNET:
       return process.env.JSON_RPC_PROVIDER!;
+    case ChainId.HARDHAT:
+      return process.env.JSON_RPC_PROVIDER_HARDHAT!;
     case ChainId.GOERLI:
       return process.env.JSON_RPC_PROVIDER_GORLI!;
     case ChainId.SEPOLIA:
@@ -283,14 +304,45 @@ export const ID_TO_PROVIDER = (id: ChainId): string => {
   }
 };
 
+const WRAPPED_NATIVE_CURRENCY_TOKEN_BLANK = (chainId: number) => new Token(
+  chainId,
+  ZERO_ADDRESS,
+  18,
+  'WETH',
+  'Wrapped Ether'
+);
 export const WRAPPED_NATIVE_CURRENCY: { [chainId in ChainId]: Token } = {
-  [ChainId.MAINNET]: new Token(
-    1,
-    '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    18,
-    'WETH',
-    'Wrapped Ether'
-  ),
+  ...(PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET !== undefined ?{
+    [ChainId.MAINNET]: new Token(
+      1,
+      PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET.contracts.tokens.weth.address,
+      18,
+      'WETH',
+      'Wrapped Ether'
+    ),
+  } :{
+    [ChainId.MAINNET]: new Token(
+      1,
+      '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+      18,
+      'WETH',
+      'Wrapped Ether'
+    )
+  }),
+  ...(PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT !== undefined ?{
+    [ChainId.HARDHAT]: new Token(
+      1,
+      PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT.contracts.tokens.weth.address,
+      18,
+      'WETH',
+      'Wrapped Ether'
+    ),
+  } :{
+    [ChainId.HARDHAT]: WRAPPED_NATIVE_CURRENCY_TOKEN_BLANK(ChainId.HARDHAT)
+  }),
+  [ChainId.OPTIMISM_SEPOLIA]: WRAPPED_NATIVE_CURRENCY_TOKEN_BLANK(ChainId.OPTIMISM_SEPOLIA),
+  [ChainId.ARBITRUM_SEPOLIA]: WRAPPED_NATIVE_CURRENCY_TOKEN_BLANK(ChainId.ARBITRUM_SEPOLIA),
+  //...
   [ChainId.GOERLI]: new Token(
     5,
     '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',

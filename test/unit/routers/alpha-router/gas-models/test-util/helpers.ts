@@ -9,7 +9,7 @@ import {
   getHighestLiquidityV3NativePool,
   getHighestLiquidityV3USDPool,
 } from '../../../../../../src/util/gas-factory-helpers';
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@pussyfinancial/sdk-core';
 
 export async function getPools(
     amountToken: Token,

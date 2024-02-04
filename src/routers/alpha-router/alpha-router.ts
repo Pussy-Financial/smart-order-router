@@ -8,7 +8,7 @@ import {
   Fraction,
   Token,
   TradeType,
-} from '@uniswap/sdk-core';
+} from '@pussyfinancial/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
 import { Pool, Position, SqrtPriceMath, TickMath } from '@uniswap/v3-sdk';
 import retry from 'async-retry';

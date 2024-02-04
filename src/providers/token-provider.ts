@@ -1,7 +1,8 @@
 import { Interface } from '@ethersproject/abi';
 import { BigNumber } from '@ethersproject/bignumber';
 import { parseBytes32String } from '@ethersproject/strings';
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, PUSSY_LIBRARY_CONFIG, Token } from '@pussyfinancial/sdk-core';
+import { ZERO_ADDRESS } from '@uniswap/universal-router-sdk/dist/utils/constants';
 import _ from 'lodash';
 
 import { IERC20Metadata__factory } from '../types/v3/factories/IERC20Metadata__factory';
@@ -9,6 +10,9 @@ import { log, WRAPPED_NATIVE_CURRENCY } from '../util';
 
 import { IMulticallProvider, Result } from './multicall-provider';
 import { ProviderConfig } from './provider';
+
+const PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET = PUSSY_LIBRARY_CONFIG.chains[ChainId.MAINNET];
+const PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT = PUSSY_LIBRARY_CONFIG.chains[ChainId.HARDHAT];
 
 /**
  * Provider for getting token data.
@@ -39,28 +43,28 @@ export type TokenAccessor = {
 // Some well known tokens on each chain for seeding cache / testing.
 export const USDC_MAINNET = new Token(
   ChainId.MAINNET,
-  '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET?.contracts.tokens.usdc.address ?? '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   6,
   'USDC',
   'USD//C'
 );
 export const USDT_MAINNET = new Token(
   ChainId.MAINNET,
-  '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+  PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET?.contracts.tokens.usdt.address ?? '0xdAC17F958D2ee523a2206206994597C13D831ec7',
   6,
   'USDT',
   'Tether USD'
 );
 export const WBTC_MAINNET = new Token(
   ChainId.MAINNET,
-  '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+  PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET?.contracts.tokens.wbtc.address ?? '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
   8,
   'WBTC',
   'Wrapped BTC'
 );
 export const DAI_MAINNET = new Token(
   ChainId.MAINNET,
-  '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+  PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET?.contracts.tokens.dai.address ?? '0x6B175474E89094C44Da98b954EedeAC495271d0F',
   18,
   'DAI',
   'Dai Stablecoin'
@@ -181,6 +185,114 @@ export const OP_OPTIMISM = new Token(
   'OP',
   'Optimism'
 );
+
+//...
+export const USDC_OPTIMISM_SEPOLIA = new Token(
+  ChainId.OPTIMISM_SEPOLIA,
+  ZERO_ADDRESS,
+  6,
+  'USDC',
+  'USD//C'
+)
+export const USDT_OPTIMISM_SEPOLIA = new Token(
+  ChainId.OPTIMISM_SEPOLIA,
+  ZERO_ADDRESS,
+  6,
+  'USDT',
+  'Tether USD'
+)
+export const WBTC_OPTIMISM_SEPOLIA = new Token(
+  ChainId.OPTIMISM_SEPOLIA,
+  ZERO_ADDRESS,
+  8,
+  'WBTC',
+  'Wrapped BTC'
+)
+export const DAI_OPTIMISM_SEPOLIA = new Token(
+  ChainId.OPTIMISM_SEPOLIA,
+  ZERO_ADDRESS,
+  18,
+  'DAI',
+  'Dai Stablecoin'
+)
+export const OP_OPTIMISM_SEPOLIA = new Token(
+  ChainId.OPTIMISM_SEPOLIA,
+  ZERO_ADDRESS,
+  18,
+  'OP',
+  'Optimism'
+)
+
+//...
+
+export const USDC_ARBITRUM_SEPOLIA = new Token(
+  ChainId.ARBITRUM_SEPOLIA,
+  ZERO_ADDRESS,
+  6,
+  'USDC',
+  'USD//C'
+);
+export const USDT_ARBITRUM_SEPOLIA = new Token(
+  ChainId.ARBITRUM_SEPOLIA,
+  ZERO_ADDRESS,
+  6,
+  'USDT',
+  'Tether USD'
+);
+export const WBTC_ARBITRUM_SEPOLIA = new Token(
+  ChainId.ARBITRUM_SEPOLIA,
+  ZERO_ADDRESS,
+  8,
+  'WBTC',
+  'Wrapped BTC'
+);
+export const DAI_ARBITRUM_SEPOLIA = new Token(
+  ChainId.ARBITRUM_SEPOLIA,
+  ZERO_ADDRESS,
+  18,
+  'DAI',
+  'Dai Stablecoin'
+);
+export const OP_ARBITRUM_SEPOLIA = new Token(
+  ChainId.ARBITRUM_SEPOLIA,
+  ZERO_ADDRESS,
+  18,
+  'OP',
+  'Optimism'
+);
+
+//...
+
+export const USDC_HARDHAT = new Token(
+  ChainId.HARDHAT,
+  PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT?.contracts.tokens.usdc.address ?? ZERO_ADDRESS,
+  6,
+  'USDC',
+  'USD//C'
+);
+export const USDT_HARDHAT = new Token(
+  ChainId.HARDHAT,
+  PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT?.contracts.tokens.usdt.address ?? ZERO_ADDRESS,
+  18,
+  'USDT',
+  'Tether USD'
+);
+export const WBTC_HARDHAT = new Token(
+  ChainId.HARDHAT,
+  PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT?.contracts.tokens.wbtc.address ?? ZERO_ADDRESS,
+  8,
+  'WBTC',
+  'Wrapped BTC'
+);
+export const DAI_HARDHAT = new Token(
+  ChainId.HARDHAT,
+  PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT?.contracts.tokens.dai.address ?? ZERO_ADDRESS,
+  18,
+  'DAI',
+  'Dai Stablecoin'
+);
+
+//...
 
 export const USDC_OPTIMISM_GOERLI = new Token(
   ChainId.OPTIMISM_GOERLI,

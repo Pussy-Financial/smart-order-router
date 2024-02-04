@@ -15,7 +15,7 @@ import {
   Rounding,
   Token,
   TradeType
-} from '@uniswap/sdk-core';
+} from '@pussyfinancial/sdk-core';
 import {
   PERMIT2_ADDRESS,
   UNIVERSAL_ROUTER_ADDRESS as UNIVERSAL_ROUTER_ADDRESS_BY_CHAIN

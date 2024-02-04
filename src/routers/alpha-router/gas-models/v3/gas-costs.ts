@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Currency, Token } from '@uniswap/sdk-core';
+import { ChainId, Currency, Token } from '@pussyfinancial/sdk-core';
 
 import { AAVE_MAINNET, LIDO_MAINNET } from '../../../../providers';
 import { V3Route } from '../../../router';
@@ -11,6 +11,9 @@ export const COST_PER_UNINIT_TICK = BigNumber.from(0);
 export const BASE_SWAP_COST = (id: ChainId): BigNumber => {
   switch (id) {
     case ChainId.MAINNET:
+    case ChainId.HARDHAT:
+    case ChainId.OPTIMISM_SEPOLIA:
+    case ChainId.ARBITRUM_SEPOLIA:
     case ChainId.GOERLI:
     case ChainId.SEPOLIA:
     case ChainId.OPTIMISM:
@@ -41,6 +44,9 @@ export const BASE_SWAP_COST = (id: ChainId): BigNumber => {
 export const COST_PER_INIT_TICK = (id: ChainId): BigNumber => {
   switch (id) {
     case ChainId.MAINNET:
+    case ChainId.HARDHAT:
+    case ChainId.OPTIMISM_SEPOLIA:
+    case ChainId.ARBITRUM_SEPOLIA:
     case ChainId.GOERLI:
     case ChainId.SEPOLIA:
     case ChainId.BNB:
@@ -70,6 +76,9 @@ export const COST_PER_INIT_TICK = (id: ChainId): BigNumber => {
 export const COST_PER_HOP = (id: ChainId): BigNumber => {
   switch (id) {
     case ChainId.MAINNET:
+    case ChainId.HARDHAT:
+    case ChainId.OPTIMISM_SEPOLIA:
+    case ChainId.ARBITRUM_SEPOLIA:
     case ChainId.GOERLI:
     case ChainId.SEPOLIA:
     case ChainId.BNB:
