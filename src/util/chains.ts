@@ -6,7 +6,10 @@ import {
   PUSSY_LIBRARY_CONFIG,
   Token,
 } from '@pussyfinancial/sdk-core';
-import { ZERO_ADDRESS } from '@uniswap/universal-router-sdk/dist/utils/constants';
+
+import {
+  ZERO_ADDRESS
+} from './constants';
 
 const PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET = PUSSY_LIBRARY_CONFIG.chains[ChainId.MAINNET];
 const PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT = PUSSY_LIBRARY_CONFIG.chains[ChainId.HARDHAT];

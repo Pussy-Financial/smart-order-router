@@ -2,11 +2,10 @@ import { Interface } from '@ethersproject/abi';
 import { BigNumber } from '@ethersproject/bignumber';
 import { parseBytes32String } from '@ethersproject/strings';
 import { ChainId, PUSSY_LIBRARY_CONFIG, Token } from '@pussyfinancial/sdk-core';
-import { ZERO_ADDRESS } from '@uniswap/universal-router-sdk/dist/utils/constants';
 import _ from 'lodash';
 
 import { IERC20Metadata__factory } from '../types/v3/factories/IERC20Metadata__factory';
-import { log, WRAPPED_NATIVE_CURRENCY } from '../util';
+import { log, WRAPPED_NATIVE_CURRENCY, ZERO_ADDRESS } from '../util';
 
 import { IMulticallProvider, Result } from './multicall-provider';
 import { ProviderConfig } from './provider';

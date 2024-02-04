@@ -1,8 +1,8 @@
 import { CHAIN_TO_ADDRESSES_MAP, ChainId, PUSSY_LIBRARY_CONFIG, Token } from '@pussyfinancial/sdk-core';
-import { ZERO_ADDRESS } from '@uniswap/universal-router-sdk/dist/utils/constants';
 import { FACTORY_ADDRESS } from '@uniswap/v3-sdk';
 
 import { NETWORKS_WITH_SAME_UNISWAP_ADDRESSES } from './chains';
+import { ZERO_ADDRESS } from './constants';
 
 const PUSSY_LIBRARY_CONFIG_CHAINS_MAINNET = PUSSY_LIBRARY_CONFIG.chains[ChainId.MAINNET];
 const PUSSY_LIBRARY_CONFIG_CHAINS_HARDHAT = PUSSY_LIBRARY_CONFIG.chains[ChainId.HARDHAT];
